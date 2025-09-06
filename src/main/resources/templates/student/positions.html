@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Open Traineeship Positions</title>
+  <link rel="stylesheet"
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
+</head>
+<body>
+  <div class="container mt-5" sec:authorize="hasAuthority('STUDENT')">
+    <h2>Available Traineeship Positions</h2>
+    <hr/>
+
+    <div th:if="${message}" class="alert alert-success" th:text="${message}"></div>
+
+    <!-- just list positions, no per-row action -->
+    <table class="table table-bordered">
+      <thead class="thead-light">
+        <tr>
+          <th>Title</th>
+          <th>Company</th>
+          <th>Location</th>
+          <th>Required Skills</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="pos : ${positions}">
+          <td th:text="${pos.title}">…</td>
+          <td th:text="${pos.company.name}">…</td>
+          <td th:text="${pos.company.location}">…</td>
+          <td th:text="${pos.requiredSkills}">…</td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(positions)}">
+          <td colspan="4"><em>No open positions available</em></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- single “Apply” button, no dropdown -->
+    <form th:action="@{/student/apply}" method="post" class="mb-3">
+      <input type="hidden"
+             th:name="${_csrf.parameterName}"
+             th:value="${_csrf.token}"/>
+      <button type="submit" class="btn btn-primary">
+        Apply for Traineeship
+      </button>
+    </form>
+
+    <a th:href="@{/student/dashboard}" class="btn btn-secondary">
+      Back to Dashboard
+    </a>
+  </div>
+</body>
+</html>

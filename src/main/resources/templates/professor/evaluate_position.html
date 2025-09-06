@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Evaluate Traineeship</title>
+  <link rel="stylesheet"
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
+</head>
+<body>
+<div class="container mt-5">
+
+  <h3>Evaluate Traineeship</h3>
+  <p>
+    <strong th:text="${position.title}">Title</strong><br/>
+    Student :&nbsp;<strong th:text="${position.assignedStudent.username}">student</strong><br/>
+    Company :&nbsp;<strong th:text="${position.company.name}">company</strong>
+  </p>
+
+  <form th:action="@{|/professor/positions/${position.id}/evaluate|}"
+        method="post" th:object="${position}">
+
+    <!-- ---------------- Student ratings ---------------- -->
+    <fieldset class="border p-3 mb-4">
+      <legend class="w-auto px-2">Student Performance</legend>
+
+      <div class="form-row">
+        <div class="form-group col-md-4">
+          <label>Motivation</label>
+          <select th:field="*{motivationRating}" class="form-control" required>
+            <option value="" disabled>Select</option>
+            <option th:each="i: ${#numbers.sequence(1,5)}"
+                    th:value="${i}" th:text="${i}">1</option>
+          </select>
+        </div>
+        <div class="form-group col-md-4">
+          <label>Effectiveness</label>
+          <select th:field="*{effectivenessRating}" class="form-control" required>
+            <option value="" disabled>Select</option>
+            <option th:each="i: ${#numbers.sequence(1,5)}"
+                    th:value="${i}" th:text="${i}">1</option>
+          </select>
+        </div>
+        <div class="form-group col-md-4">
+          <label>Efficiency</label>
+          <select th:field="*{efficiencyRating}" class="form-control" required>
+            <option value="" disabled>Select</option>
+            <option th:each="i: ${#numbers.sequence(1,5)}"
+                    th:value="${i}" th:text="${i}">1</option>
+          </select>
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- ---------------- Company ratings ---------------- -->
+    <fieldset class="border p-3 mb-4">
+      <legend class="w-auto px-2">Company Evaluation</legend>
+
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label>Facilities</label>
+          <select th:field="*{facilitiesRating}" class="form-control" required>
+            <option value="" disabled>Select</option>
+            <option th:each="i: ${#numbers.sequence(1,5)}"
+                    th:value="${i}" th:text="${i}">1</option>
+          </select>
+        </div>
+        <div class="form-group col-md-6">
+          <label>Guidance</label>
+          <select th:field="*{guidanceRating}" class="form-control" required>
+            <option value="" disabled>Select</option>
+            <option th:each="i: ${#numbers.sequence(1,5)}"
+                    th:value="${i}" th:text="${i}">1</option>
+          </select>
+        </div>
+      </div>
+    </fieldset>
+
+    <button class="btn btn-primary">Submit</button>
+    <a th:href="@{/professor/positions}" class="btn btn-secondary">Cancel</a>
+  </form>
+
+</div>
+</body>
+</html>

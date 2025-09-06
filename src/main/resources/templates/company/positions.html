@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org"
+       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8"/>
+  <title>My advertised positions</title>
+  <link rel="stylesheet"
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
+</head>
+<body>
+<div class="container mt-5" sec:authorize="hasAuthority('COMPANY')">
+
+  <h2>Your advertised traineeship positions</h2>
+  <hr/>
+
+  <div th:if="${message}" class="alert alert-success" th:text="${message}"></div>
+
+  <a th:href="@{/company/positions/create}" class="btn btn-success mb-3">
+    + New Position
+  </a>
+
+  <table class="table table-bordered">
+    <thead class="thead-light">
+      <tr>
+        <th>Title</th>
+        <th>Start</th>
+        <th>End</th>
+        <th>Required Skills</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr th:each="pos : ${positions}">
+        <td th:text="${pos.title}">Title</td>
+        <td th:text="${pos.startDate}">2025-06-01</td>
+        <td th:text="${pos.endDate}">2025-09-30</td>
+        <td th:text="${pos.requiredSkills}">Java, SQL</td>
+        <td>
+          <a th:href="@{|/company/positions/delete/${pos.id}|}"
+             class="btn btn-sm btn-danger"
+             onclick="return confirm('Delete this position?');">
+            Delete
+          </a>
+        </td>
+      </tr>
+      <tr th:if="${#lists.isEmpty(positions)}">
+        <td colspan="5"><em>No open positions.</em></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <a th:href="@{/company/dashboard}" class="btn btn-secondary mt-3">
+    Back to dashboard
+  </a>
+</div>
+</body>
+</html>

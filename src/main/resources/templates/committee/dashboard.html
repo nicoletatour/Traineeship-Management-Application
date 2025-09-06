@@ -1,0 +1,29 @@
+<!-- src/main/resources/templates/committee/dashboard.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Committee Dashboard</title>
+  <link rel="stylesheet"
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
+</head>
+<body>
+  <div class="container mt-5" sec:authorize="hasAuthority('COMMITTEE')">
+    <h2>Welcome to the Committee Dashboard</h2>
+    <hr>
+
+    <div class="mb-4">
+      <h5>Logged in as: <span sec:authentication="name"></span></h5>
+      <h6>Role: <span sec:authentication="authorities"></span></h6>
+    </div>
+
+	<div class="btn-group mb-5" role="group" aria-label="Committee actions">
+	  <a th:href="@{/committee/applications}" class="btn btn-primary btn-sm">List Student Applications</a>
+	  <a th:href="@{/committee/assignments/assign-professor}" class="btn btn-primary btn-sm">Assign Supervising Professor</a>
+	  <a th:href="@{/committee/traineeships/in-progress}" class="btn btn-primary btn-sm">List In-Progress Traineeships</a>
+	  <a th:href="@{/committee/traineeships/completed}" class="btn btn-primary btn-sm">List Completed Traineeships</a> <!-- Νέα ενότητα -->
+	  <a th:href="@{/logout}" class="btn btn-danger btn-sm">Logout</a>
+	</div>
+</body>
+</html>

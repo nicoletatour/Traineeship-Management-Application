@@ -1,0 +1,27 @@
+<!-- src/main/resources/templates/professor/dashboard.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Professor Dashboard</title>
+  <link rel="stylesheet"
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
+</head>
+<body>
+  <div class="container mt-5" sec:authorize="hasAuthority('PROFESSOR')">
+    <h2>Welcome to the Professor Dashboard</h2>
+    <hr/>
+
+    <div class="mb-4">
+      <h5>Logged in as: <span sec:authentication="name"></span></h5>
+      <h6>Role: <span sec:authentication="authorities"></span></h6>
+    </div>
+
+    <div class="btn-group mb-5" role="group" aria-label="Professor actions">
+      <a th:href="@{/professor/profile}" class="btn btn-primary btn-sm">My Profile</a>
+      <a th:href="@{/professor/positions}" class="btn btn-primary btn-sm">My Supervised Positions</a>
+      <a th:href="@{/logout}" class="btn btn-danger btn-sm">Logout</a>
+  </div>
+</body>
+</html>

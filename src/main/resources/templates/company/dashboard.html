@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+  <meta charset="UTF-8"/>
+  <title>Company Dashboard</title>
+  <link rel="stylesheet"
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
+</head>
+<body>
+<div class="container mt-5" sec:authorize="hasAuthority('COMPANY')">
+
+    <h2>Welcome to the Company Dashboard</h2>
+    <hr>
+
+    <div class="mb-4">
+        <h5>Logged in as: <span sec:authentication="name"></span></h5>
+        <h6>Role: <span sec:authentication="authorities"></span></h6>
+    </div>
+
+    <div class="btn-group mb-5" role="group" aria-label="Company actions">
+        <a th:href="@{/company/profile}" class="btn btn-primary btn-sm">My Profile</a>
+        <a th:href="@{/company/positions}" class="btn btn-primary btn-sm">My Advertised Positions</a>
+        <a th:href="@{/company/positions/assigned}" class="btn btn-primary btn-sm">Assigned Positions</a>
+        <a th:href="@{/logout}" class="btn btn-danger btn-sm">Logout</a>
+    </div>
+</div>
+</body>
+</html>

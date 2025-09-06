@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Student Applications</title>
+  <link rel="stylesheet"
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
+</head>
+<body>
+<div class="container mt-5" sec:authorize="hasAuthority('COMMITTEE')">
+  <h2>Students with Traineeship Requests</h2>
+  <hr/>
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Student</th>
+        <th>University ID</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr th:each="stu : ${students}">
+        <td th:text="${stu.fullName}">Name</td>
+        <td th:text="${stu.universityIdNumber}">12345</td>
+        <td>
+          <div class="btn-group btn-group-sm" role="group">
+            <!-- By Interests -->
+            <form th:action="@{/committee/applications/{studentId}/search(studentId=${stu.id})}"
+                  method="post" style="display:inline">
+              <input type="hidden" name="criteria"
+                     th:value="${T(myproject.traineeship_management_app.search.SearchCriteria).INTERESTS}"/>
+              <button type="submit" class="btn btn-info">By Interests</button>
+            </form>
+            <!-- By Location -->
+            <form th:action="@{/committee/applications/{studentId}/search(studentId=${stu.id})}"
+                  method="post" style="display:inline">
+              <input type="hidden" name="criteria"
+                     th:value="${T(myproject.traineeship_management_app.search.SearchCriteria).LOCATION}"/>
+              <button type="submit" class="btn btn-warning">By Location</button>
+            </form>
+            <!-- Both -->
+            <form th:action="@{/committee/applications/{studentId}/search(studentId=${stu.id})}"
+                  method="post" style="display:inline">
+              <input type="hidden" name="criteria"
+                     th:value="${T(myproject.traineeship_management_app.search.SearchCriteria).BOTH}"/>
+              <button type="submit" class="btn btn-success">Both</button>
+            </form>
+          </div>
+        </td>
+      </tr>
+      <tr th:if="${#lists.isEmpty(students)}">
+        <td colspan="3"><em>No students with requests.</em></td>
+      </tr>
+    </tbody>
+  </table>
+  <a th:href="@{/committee/dashboard}" class="btn btn-secondary">← Back to Dashboard</a>
+</div>
+</body>
+</html>

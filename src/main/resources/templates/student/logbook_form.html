@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8"/>
+  <title>New Logbook Entry</title>
+  <link rel="stylesheet"
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
+</head>
+<body>
+  <div class="container mt-5" sec:authorize="hasAuthority('STUDENT')">
+    <h2>New Logbook Entry</h2>
+    <form th:action="@{/student/logbook}" th:object="${entry}" method="post">
+      <div class="form-group">
+        <label for="content">What did you do today?</label>
+        <textarea id="content" th:field="*{content}" rows="5" class="form-control" required></textarea>
+      </div>
+      <button type="submit" class="btn btn-success">Save Entry</button>
+      <a th:href="@{/student/logbook}" class="btn btn-secondary">Cancel</a>
+    </form>
+  </div>
+</body>
+</html>

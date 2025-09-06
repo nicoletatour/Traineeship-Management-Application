@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Create/Edit Student Profile</title>
+  <link rel="stylesheet"
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
+</head>
+<body>
+<div class="container mt-5" sec:authorize="hasAuthority('STUDENT')">
+  <h2 th:text="${student.id} != null ? 'Edit Your Profile' : 'Create Student Profile'"></h2>
+  <form th:action="@{/student/profile}" th:object="${student}" method="post">
+    <input type="hidden" th:if="${student.id != null}" th:field="*{id}" />
+
+    <div class="form-group">
+      <label for="fullName">Full Name</label>
+      <input type="text" th:field="*{fullName}" class="form-control" id="fullName"
+             placeholder="Enter your full name" required/>
+    </div>
+
+    <div class="form-group">
+      <label for="universityIdNumber">University ID Number</label>
+      <input type="text" th:field="*{universityIdNumber}" class="form-control" id="universityIdNumber"
+             placeholder="Enter your university ID number" required/>
+    </div>
+
+    <div class="form-group">
+      <label for="interests">Interests</label>
+      <input type="text" th:field="*{interests}" class="form-control" id="interests"
+             placeholder="Comma-separated interests"/>
+    </div>
+
+    <div class="form-group">
+      <label for="skills">Skills</label>
+      <input type="text" th:field="*{skills}" class="form-control" id="skills"
+             placeholder="Comma-separated skills"/>
+    </div>
+
+    <div class="form-group">
+      <label for="preferredLocation">Preferred Location</label>
+      <input type="text" th:field="*{preferredLocation}" class="form-control" id="preferredLocation"
+             placeholder="City, Country"/>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save Profile</button>
+    <a th:href="@{/student/dashboard}" class="btn btn-secondary">Cancel</a>
+  </form>
+</div>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Assign Supervisor</title>
+  <link rel="stylesheet"
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
+</head>
+<body>
+  <div class="container mt-5" sec:authorize="hasAuthority('COMMITTEE')">
+    <h2 th:text="'Assign Supervisor for: ' + ${position.title}"></h2>
+
+    <!-- criteria tabs -->
+    <div class="btn-group btn-group-toggle mt-3" data-toggle="buttons">
+      <label th:each="crit : ${criteriaList}"
+             th:classappend="${crit} == ${selectedCriteria} ? 'btn-primary active' : 'btn-outline-secondary'"
+             class="btn">
+        <input type="radio" name="criteria"
+               th:checked="${crit} == ${selectedCriteria}"
+               th:onchange="|location.href='@{/committee/assignments/assign-professor/{id}(id=${position.id},criteria=${crit})}'|"/>
+        By <span th:text="${crit.name().toLowerCase()}">criteria</span>
+      </label>
+    </div>
+
+    <form th:action="@{/committee/assignments/assign-professor/{id}(id=${position.id})}"
+          method="post" class="mt-4">
+      <div class="form-group">
+        <label for="professorSelect">Choose Professor</label>
+
+        <table class="table table-bordered table-hover">
+          <thead class="thead-light">
+            <tr>
+              <th style="width:1%"></th>
+              <th>Name</th>
+              <th>Interests Match</th>
+              <th>Current Load</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="prof : ${professors}">
+              <td>
+                <input type="radio" name="professorId"
+                       th:value="${prof.id}" required/>
+              </td>
+              <td th:text="${prof.fullName}">Prof. Name</td>
+              <td>
+                <span th:if="${matchSet.contains(prof.id)}"
+                      class="text-success font-weight-bold">Yes</span>
+                <span th:unless="${matchSet.contains(prof.id)}"
+                      class="text-muted">No</span>
+              </td>
+              <td th:text="${loadMap[prof.id]}">0</td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(professors)}">
+              <td colspan="4" class="text-center"><em>No professors found.</em></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <button type="submit" class="btn btn-success">Assign Supervisor</button>
+      <a th:href="@{/committee/assignments/assign-professor}"
+         class="btn btn-secondary ml-2">Cancel</a>
+         <a th:href="@{/committee/dashboard}" class="btn btn-outline-secondary ml-2">
+        ← Back to Dashboard
+      </a>
+    </form>
+  </div>
+</body>
+</html>

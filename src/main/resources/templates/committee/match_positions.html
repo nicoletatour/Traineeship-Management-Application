@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Matched Positions</title>
+  <link rel="stylesheet"
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
+</head>
+<body>
+  <div class="container mt-5" sec:authorize="hasAuthority('COMMITTEE')">
+    <h2>Traineeships for Student: <span th:text="${student.fullName}">Name</span></h2>
+    <hr/>
+
+    <table class="table table-bordered">
+      <thead class="thead-light">
+        <tr>
+          <th>Title</th>
+          <th>Company</th>
+          <th>Location</th>
+          <th>Required Skills</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="pos : ${positions}">
+          <td th:text="${pos.title}">Title</td>
+          <td th:text="${pos.company.name}">Company</td>
+          <td th:text="${pos.company.location}">Location</td>
+          <td th:text="${pos.requiredSkills}">Skills</td>
+          <td>
+            <form th:action="@{/committee/applications/{studentId}/assign/{positionId}(
+                               studentId=${student.id},positionId=${pos.id})}"
+                  method="post">
+              <button type="submit" class="btn btn-sm btn-primary">Assign</button>
+            </form>
+          </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(positions)}">
+          <td colspan="5"><em>No positions available.</em></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <a th:href="@{/committee/applications}" class="btn btn-secondary">← Back to Requests</a>
+  </div>
+</body>
+</html>

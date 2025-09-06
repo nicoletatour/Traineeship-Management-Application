@@ -1,0 +1,42 @@
+<!-- src/main/resources/templates/professor/profile.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Create/Edit Professor Profile</title>
+  <link rel="stylesheet"
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
+</head>
+<body>
+  <div class="container mt-5" sec:authorize="hasAuthority('PROFESSOR')">
+    <h2 th:text="${professor.id} != null ? 'Edit Profile' : 'Create Professor Profile'"></h2>
+    <form th:action="@{/professor/profile}"
+          th:object="${professor}"
+          method="post">
+
+      <div class="form-group">
+        <label for="fullName">Full Name</label>
+        <input type="text"
+               th:field="*{fullName}"
+               class="form-control"
+               id="fullName"
+               placeholder="Your full name"
+               required/>
+      </div>
+
+      <div class="form-group">
+        <label for="interests">Interests</label>
+        <input type="text"
+               th:field="*{interests}"
+               class="form-control"
+               id="interests"
+               placeholder="Comma-separated, e.g. AI, Databases"
+               required/>
+      </div>
+
+      <button type="submit" class="btn btn-primary">Save Profile</button>
+      <a th:href="@{/professor/dashboard}" class="btn btn-secondary">Cancel</a>
+    </form>
+  </div>
+</body>
+</html>

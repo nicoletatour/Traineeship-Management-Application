@@ -1,0 +1,118 @@
+<!-- src/main/resources/templates/committee/in_progress_positions.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8"/>
+  <title>In-Progress Traineeships</title>
+
+  <!---- Bootstrap (CDN) -->
+  <link rel="stylesheet"
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
+</head>
+
+<body>
+<div class="container mt-5" sec:authorize="hasAuthority('COMMITTEE')">
+
+  <h2 class="mb-3">In-Progress Traineeships</h2>
+
+  <!-- flash messages -->
+  <div th:if="${msg}" class="alert alert-success" th:text="${msg}"></div>
+
+  <table class="table table-sm table-striped table-hover">
+    <thead class="thead-light">
+      <tr>
+        <th>Title</th>
+        <th>Company</th>
+        <th>Student</th>
+        <th>Dates</th>
+        <th class="text-center">Company&nbsp;avg</th>
+        <th class="text-center">Professor&nbsp;avg</th>
+        <th class="text-center">Committee</th>
+        <th class="text-center">Action</th>
+      </tr>
+    </thead>
+
+    <tbody>
+  <tr th:each="pos : ${positions}">
+    <td th:text="${pos.title}">Position title</td>
+    <td th:text="${pos.company.name}">Company name</td>
+    <td th:text="${pos.assignedStudent.username}">Student username</td>
+
+    <td>
+      <span th:text="${#temporals.format(pos.startDate,'dd/MM/yyyy')}"></span>
+      &nbsp;–&nbsp;
+      <span th:text="${#temporals.format(pos.endDate,'dd/MM/yyyy')}"></span>
+    </td>
+
+    <td class="text-center">
+      <span th:if="${pos.companyMotivationRating != null}"
+            th:text="${#numbers.formatDecimal(
+                        (pos.companyMotivationRating +
+                         pos.companyEffectivenessRating +
+                         pos.companyEfficiencyRating) / 3.0 , 1 , 1)}">-</span>
+      <em th:unless="${pos.companyMotivationRating != null}">n/a</em>
+    </td>
+
+    <!-- Μέσος όρος καθηγητή -->
+    <td class="text-center">
+      <span th:if="${pos.motivationRating != null}"
+            th:text="${#numbers.formatDecimal(
+                        (pos.motivationRating +
+                         pos.effectivenessRating +
+                         pos.efficiencyRating +
+                         pos.facilitiesRating +
+                         pos.guidanceRating) / 5.0 , 1 , 1)}">-</span>
+      <em th:unless="${pos.motivationRating != null}">n/a</em>
+    </td>
+
+    <td class="text-center" th:switch="${pos.committeeResult}">
+      <span
+        th:case="${T(myproject.traineeship_management_app.domainmodel.CommitteeResult).PASS}"
+        class="badge badge-success"
+        th:text="${pos.committeeResult}">
+        PASS
+      </span>
+      <span
+        th:case="${T(myproject.traineeship_management_app.domainmodel.CommitteeResult).FAIL}"
+        class="badge badge-danger"
+        th:text="${pos.committeeResult}">
+        FAIL
+      </span>
+      <span
+        th:case="*"
+        class="badge badge-secondary"
+        th:text="${pos.committeeResult}">
+        PENDING
+      </span>
+    </td>
+
+    <!-- Action column -->
+    <td class="text-center">
+      <!-- Show “Review” only while it’s still PENDING -->
+      <a th:if="${pos.committeeResult == T(myproject.traineeship_management_app.domainmodel.CommitteeResult).PENDING}"
+         th:href="@{/committee/traineeships/{id}/review(id=${pos.id})}"
+         class="btn btn-sm btn-primary">
+        Review
+      </a>
+
+      <!-- After decision, just show Complete text -->
+      <span th:unless="${pos.committeeResult == T(myproject.traineeship_management_app.domainmodel.CommitteeResult).PENDING}"
+            class="badge badge-secondary">
+        Complete
+      </span>
+    </td>
+  </tr>
+
+  <tr th:if="${#lists.isEmpty(positions)}">
+    <td colspan="8" class="text-center"><em>No in-progress traineeships.</em></td>
+  </tr>
+</tbody>
+  </table>
+
+  <a th:href="@{/committee/dashboard}" class="btn btn-secondary">
+    ← Back&nbsp;to&nbsp;Dashboard
+  </a>
+</div>
+</body>
+</html>

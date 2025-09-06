@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Completed Traineeships</title>
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
+</head>
+
+<body>
+<div class="container mt-5" sec:authorize="hasAuthority('COMMITTEE')">
+    <h2 class="mb-3">Completed Traineeships</h2>
+
+    <table class="table table-sm table-striped table-hover">
+        <thead class="thead-light">
+        <tr>
+            <th>Title</th>
+            <th>Company</th>
+            <th>Student</th>
+            <th>Dates</th>
+            <th class="text-center">Committee Decision</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="pos : ${positions}">
+            <td th:text="${pos.title}"></td>
+            <td th:text="${pos.company.name}"></td>
+            <td th:text="${pos.assignedStudent.username}"></td>
+            <td>
+                <span th:text="${#temporals.format(pos.startDate,'dd/MM/yyyy')}"></span>
+                &nbsp;–&nbsp;
+                <span th:text="${#temporals.format(pos.endDate,'dd/MM/yyyy')}"></span>
+            </td>
+            <td class="text-center" th:text="${pos.committeeResult}"></td>
+        </tr>
+        </tbody>
+
+    </table>
+
+    <a th:href="@{/committee/dashboard}" class="btn btn-secondary">
+        &larr; Back to Dashboard
+    </a>
+</div>
+</body>
+</html>

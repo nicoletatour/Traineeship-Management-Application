@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Assigned Traineeship Positions</title>
+  <link rel="stylesheet"
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
+</head>
+<body>
+
+<div class="container mt-5" sec:authorize="hasAuthority('COMPANY')">
+  <h2>Positions Assigned to Students</h2>
+  <a th:href="@{/company/positions}" class="btn btn-secondary mb-3">
+    ← Back to Available
+  </a>
+
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Student</th>
+        <th>Start</th>
+        <th>End</th>
+        <th>Description</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+<tbody>
+  <tr th:each="pos : ${positions}">
+    <td th:text="${pos.title}">Title</td>
+    <td th:text="${pos.assignedStudent.username}">studentUsername</td>
+    <td th:text="${pos.startDate}">2025-07-01</td>
+    <td th:text="${pos.endDate}">2025-12-31</td>
+    <td th:text="${#strings.abbreviate(pos.description, 50)}">…</td>
+    <td>
+      <!-- Αν δεν έχει μπει company αξιολόγηση -->
+      <a th:if="${pos.companyMotivationRating == null}"
+         th:href="@{|/company/positions/${pos.id}/evaluate|}"
+         class="btn btn-sm btn-primary">
+        Evaluate
+      </a>
+      <!-- Αλλιώς απλά ένα στατικό label -->
+      <span th:unless="${pos.companyMotivationRating == null}"
+            class="badge badge-secondary">
+        Completed
+      </span>
+    </td>
+  </tr>
+  <tr th:if="${#lists.isEmpty(positions)}">
+    <td colspan="6" class="text-center">
+      No positions have yet been assigned.
+    </td>
+  </tr>
+</tbody>
+  </table>
+  <a th:href="@{/company/dashboard}" class="btn btn-secondary">
+  ← Back to Dashboard
+</a>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8"/>
+  <title>My Logbook</title>
+  <link rel="stylesheet"
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
+</head>
+<body>
+  <div class="container mt-5" sec:authorize="hasAuthority('STUDENT')">
+    <h2>My Traineeship Logbook</h2>
+    <a th:href="@{/student/logbook/new}" class="btn btn-primary mb-3">New Entry</a>
+
+    <table class="table table-striped">
+      <thead>
+        <tr><th>Date</th><th>Report</th></tr>
+      </thead>
+      <tbody>
+        <tr th:each="entry : ${entries}">
+          <td th:text="${entry.date}">2025-05-18</td>
+          <td th:text="${entry.content}">...</td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(entries)}">
+          <td colspan="2"><em>No entries yet.</em></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <a th:href="@{/student/dashboard}" class="btn btn-secondary">Back to Dashboard</a>
+  </div>
+</body>
+</html>

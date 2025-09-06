@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Pending Evaluations</title>
+  <link rel="stylesheet"
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
+</head>
+<body>
+<div class="container mt-5">
+  <h2>Traineeships awaiting your evaluation</h2>
+
+  <table class="table table-striped mt-4">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Company</th>
+        <th>Student</th>
+        <th>Period</th>
+        <th>Description</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr th:each="pos : ${positions}">
+        <td th:text="${pos.title}">title</td>
+        <td th:text="${pos.company.name}">company</td>
+        <td th:text="${pos.assignedStudent.username}">student</td>
+        <td>
+          <span th:text="${pos.startDate}">–</span> –
+          <span th:text="${pos.endDate}">–</span>
+        </td>
+        <td th:text="${#strings.abbreviate(pos.description,60)}">desc</td>
+        <td>
+          <a th:href="@{|/professor/positions/${pos.id}/evaluate|}"
+             class="btn btn-sm btn-primary">Evaluate</a>
+        </td>
+      </tr>
+      <tr th:if="${#lists.isEmpty(positions)}">
+        <td colspan="6" class="text-center"><em>All caught up – nothing pending.</em></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <a th:href="@{/professor/dashboard}" class="btn btn-secondary">← Back</a>
+</div>
+</body>
+</html>
